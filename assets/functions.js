@@ -1,82 +1,56 @@
-
-// ASK IF VISITED
+// 1.- ASK IF VISITED
 let visited = localStorage.getItem("visitedOnce");
 let targetURL = localStorage.getItem("favCountry");
 
+// NUNCA HA (estado/guardado opciones) EN LA PÁGINA	y se REDIRIGIRÁ a su Región IP
 if ( visited == null || visited == undefined) {
-	// NUNCA HA (estado/guardado opciones) EN LA PÁGINA		
-	// HACER REDIRECCIÓN
+
+	// URLS DE DESTINO
 	const MAPPINGS = {
 		ES: 'http://localhost/redirecciones/',
 	    CO: 'http://localhost/redirecciones/co/',
 	    MX: 'http://localhost/redirecciones/mx/',
 	    RO: 'http://localhost/redirecciones/gg',
 	};
+
+// NO COPIAR!!! ---> MODO chungo de PIllar IP COUNTRY
 	fetch('https://api.ipregistry.co/?key=6vch6riqf6tecd')
 	    .then(function(response) { return response.json(); })
 	    .then(function(payload) {
-	        const userCountryCode = payload['location']['country']['code'];
-	        
-	        let redirectionUrl = MAPPINGS[userCountryCode];
+// NO COPIAR!!! ---> MODO chungo de PIllar IP COUNTRY
 
-	        // SI NO ESTA EN LA LISTA
-	        if (!redirectionUrl) {
-	            redirectionUrl = 'http://localhost/redirecciones/en/';
-	        }
-	        // EJECUTAR REDIRECCION
-	        localStorage.setItem("visitedOnce","true");
-	        window.location.href = redirectionUrl;
+	// VARIABLE A SOBREESCRIBIR CON LA DE CF
+    const userCountryCode = payload['location']['country']['code'];
 
+
+    // CODIGO BUENO	        
+    let redirectionUrl = MAPPINGS[userCountryCode];
+    // SI NO ESTA EN LA LISTA
+    if (!redirectionUrl) {
+        redirectionUrl = 'http://localhost/redirecciones/en/';
+    }
+    // EJECUTAR REDIRECCION
+    localStorage.setItem("visitedOnce","true");
+    window.location.href = redirectionUrl;
+
+
+// NO COPIAR!!! ---> Es el manejo de errores de la API
 	    }).catch(function (error) {
 	    	console.error("Handle errors here", error);
 	    });
+// NO COPIAR!!! ---> Es el manejo de errores de la API
 
-} else {
-	// SI HA ESTADO EN LA WEB		
-	const MAPPINGS2 = {
-		spain: 'http://localhost/redirecciones/',
-	    colombia: 'http://localhost/redirecciones/co/',
-	    mexico: 'http://localhost/redirecciones/mx/',
-	    english: 'http://localhost/redirecciones/en/',
-	};
 
-	let favChoice = localStorage.getItem("favCountry");
-	let favRedirectionUrl = MAPPINGS2[favChoice];
-    
-    if (!favRedirectionUrl) {
-        favRedirectionUrl = 'http://localhost/redirecciones/en/';
-    }
+} 
 
-    localStorage.setItem("visitedOnce","true");
-    // window.location.href = favRedirectionUrl;
-
-/*
-	console.log("ya has estado aquí "+favRedirectionUrl);
-	// COMPROBAR SI HA SELECCIONADO IDIOMA
-	if (targetURL == "colombia") {
-		// GOTO COLOMBIA
-		localStorage.setItem("visitedOnce","true");
-		// window.location.href = "http://localhost/redirecciones/co/";
-		console.log("cacafuti")
-	} else if (targetURL == "mexico") {
-		// GOTO MEXICO
-		localStorage.setItem("visitedOnce","true");
-		// window.location.href = "http://localhost/redirecciones/mx/";
-	} else if (targetURL == "spain") {
-		// GOTO SPAIN
-		localStorage.setItem("visitedOnce","true");
-		// window.location.href = "http://localhost/redirecciones/";
-	} else if (targetURL == "english") {
-		// GOTO ENGLISH
-		localStorage.setItem("visitedOnce","true");
-		// window.location.href = "http://localhost/redirecciones/en/";
-	}
-
-*/
+else {
 
 }
 
 // POPUP
+/*
+Ahora solo guarda/sobreescribe el valor en localstorage mienrtas esté el checbox activo
+*/
 function languageSelector(e){
 	e.stopPropagation();
 	let checkBox = document.getElementById("guardarPais");
